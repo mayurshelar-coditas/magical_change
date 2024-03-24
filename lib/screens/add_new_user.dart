@@ -49,7 +49,7 @@ class AddNewUser extends StatelessWidget {
                 ),
                 title: "New User",
               ),
-              SizedBox(height: 30.h),
+              SizedBox(height: 5.h),
               Padding(
                 padding: EdgeInsets.only(left: 30.w, right: 30.w),
                 child: Row(

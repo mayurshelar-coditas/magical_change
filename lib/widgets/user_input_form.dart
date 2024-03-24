@@ -69,7 +69,7 @@ class UserDetailsFrom extends StatelessWidget {
             },
           ),
         ),
-        SizedBox(height: 20.h),
+        SizedBox(height: 10.h),
         Card(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30.r),
@@ -146,7 +146,7 @@ class UserDetailsFrom extends StatelessWidget {
             },
           ),
         ),
-        SizedBox(height: 25.h),
+        SizedBox(height: 5.h),
       ],
     );
   }
