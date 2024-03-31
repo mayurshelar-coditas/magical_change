@@ -39,7 +39,7 @@ class AddNewUser extends StatelessWidget {
           padding: EdgeInsets.only(left: 20.w, right: 20.w),
           child: Column(
             children: [
-              UserDetailsFrom(
+              UserDetailsForm(
                 name: _name,
                 address: _address,
                 email: _email,

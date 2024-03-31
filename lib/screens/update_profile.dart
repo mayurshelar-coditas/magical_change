@@ -54,7 +54,7 @@ class UpdateProfileState extends State<UpdateProfile> {
           key: _formKey,
           child: Column(
             children: [
-              UserDetailsFrom(
+              UserDetailsForm(
                 name: _name,
                 address: _address,
                 email: _email,
