@@ -1,18 +1,14 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:magical_change/models/user_details.dart';
 
-class UserListItemWidget extends StatefulWidget {
+class UserListItemWidget extends StatelessWidget {
   const UserListItemWidget({required this.userDetails, super.key});
 
   final UserDetails userDetails;
 
-  @override
-  State<UserListItemWidget> createState() => _UserListItemWidgetState();
-}
-
-class _UserListItemWidgetState extends State<UserListItemWidget> {
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -30,12 +26,12 @@ class _UserListItemWidgetState extends State<UserListItemWidget> {
                 children: [
                   CircleAvatar(
                     radius: 70.r,
-                    backgroundImage: widget.userDetails.avatar,
+                    backgroundImage: userDetails.avatar,
                   ),
                   SizedBox(height: 10.h),
                   Text(
                     textAlign: TextAlign.center,
-                    widget.userDetails.name,
+                    userDetails.name,
                     style: GoogleFonts.sansita(
                       fontSize: 28.sp,
                       fontWeight: FontWeight.w700,
@@ -55,7 +51,7 @@ class _UserListItemWidgetState extends State<UserListItemWidget> {
                   ),
                 ),
                 Text(
-                  widget.userDetails.phoneNumber,
+                  userDetails.phoneNumber,
                   style: GoogleFonts.sansita(
                     fontSize: 15.sp,
                     fontWeight: FontWeight.w400,
@@ -64,6 +60,7 @@ class _UserListItemWidgetState extends State<UserListItemWidget> {
               ],
             ),
             Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(width: 20.w),
                 Text(
@@ -73,16 +70,21 @@ class _UserListItemWidgetState extends State<UserListItemWidget> {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                Text(
-                  widget.userDetails.address,
-                  style: GoogleFonts.sansita(
-                    fontSize: 15.sp,
-                    fontWeight: FontWeight.w400,
+                Expanded(
+                  child: Text(
+                    userDetails.address,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: GoogleFonts.sansita(
+                      fontSize: 15.sp,
+                      fontWeight: FontWeight.w400,
+                    ),
                   ),
                 ),
               ],
             ),
             Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(width: 20.w),
                 Text(
@@ -92,12 +94,14 @@ class _UserListItemWidgetState extends State<UserListItemWidget> {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                Text(
-                  widget.userDetails.email,
-                  style: GoogleFonts.sansita(
-                    color: Colors.blue,
-                    fontSize: 15.sp,
-                    fontWeight: FontWeight.w400,
+                Expanded(
+                  child: Text(
+                    userDetails.email,
+                    style: GoogleFonts.sansita(
+                      color: Colors.blue,
+                      fontSize: 15.sp,
+                      fontWeight: FontWeight.w400,
+                    ),
                   ),
                 ),
               ],

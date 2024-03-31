@@ -1,43 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:magical_change/models/user_details.dart';
+import 'package:magical_change/providers/user_data_provider.dart';
 import 'package:magical_change/screens/update_profile.dart';
 import 'package:magical_change/widgets/users_list_item_widget.dart';
+import 'package:provider/provider.dart';
 
-class UserList extends StatefulWidget {
-  const UserList({required this.users, super.key});
-
-  final List<UserDetails> users;
-
-  @override
-  State<UserList> createState() {
-    return _UserListState();
-  }
-}
-
-class _UserListState extends State<UserList> {
+class UserList extends StatelessWidget {
+  const UserList({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final userDataProvider = Provider.of<UserDataProvider>(context);
     return ListView.builder(
-      itemCount: widget.users.length,
+      itemCount: userDataProvider.users.length,
       itemBuilder: (BuildContext context, int index) {
         return GestureDetector(
           onTap: () {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => UpdateProfile(
-                  userDetails: widget.users[index],
-                ),
+                builder: (context) => UpdateProfile(index: index),
               ),
-            ).then(
-              (updatedUserDetails) {
-                if (updatedUserDetails != null) {
-                  setState(
-                    () {},
-                  );
-                }
-              },
             );
           },
           onLongPress: () {
@@ -58,11 +40,7 @@ class _UserListState extends State<UserList> {
                     TextButton(
                       onPressed: () {
                         Navigator.of(context).pop();
-                        setState(
-                          () {
-                            widget.users.remove(widget.users[index]);
-                          },
-                        );
+                        userDataProvider.deleteUser(index);
                       },
                       child: const Text("Delete"),
                     ),
@@ -71,8 +49,10 @@ class _UserListState extends State<UserList> {
               },
             );
           },
-          child: UserListItemWidget(
-            userDetails: widget.users[index],
+          child: Consumer<UserDataProvider>(
+            builder: (context, value, child) => UserListItemWidget(
+              userDetails: value.users[index],
+            ),
           ),
         );
       },

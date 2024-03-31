@@ -3,8 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class UserDetailsFrom extends StatelessWidget {
-  const UserDetailsFrom(
+class UserDetailsForm extends StatelessWidget {
+  const UserDetailsForm(
       {required this.name,
       required this.address,
       required this.email,

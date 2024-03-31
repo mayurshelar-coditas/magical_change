@@ -2,22 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:magical_change/models/user_details.dart';
+import 'package:magical_change/providers/user_data_provider.dart';
 import 'package:magical_change/widgets/user_input_form.dart';
+import 'package:provider/provider.dart';
 
 class AddNewUser extends StatelessWidget {
-  AddNewUser(this.onUserAdded, {super.key});
-
-  final void Function(UserDetails newUser) onUserAdded;
-
-  final UserDetails newUser = UserDetails(
-    name: "",
-    email: "",
-    phoneNumber: "",
-    address: "",
-    avatar: const AssetImage(
-      'assets/images/avatar5.png',
-    ),
-  );
+  AddNewUser({super.key});
 
   final TextEditingController _name = TextEditingController();
   final TextEditingController _email = TextEditingController();
@@ -27,6 +17,7 @@ class AddNewUser extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final userDataProvider = Provider.of<UserDataProvider>(context, listen: false);
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 238, 233, 233),
       appBar: AppBar(
@@ -39,7 +30,7 @@ class AddNewUser extends StatelessWidget {
           padding: EdgeInsets.only(left: 20.w, right: 20.w),
           child: Column(
             children: [
-              UserDetailsFrom(
+              UserDetailsForm(
                 name: _name,
                 address: _address,
                 email: _email,
@@ -70,11 +61,16 @@ class AddNewUser extends StatelessWidget {
                     ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
-                          newUser.name = _name.text;
-                          newUser.email = _email.text;
-                          newUser.phoneNumber = _phoneNumber.text;
-                          newUser.address = _address.text;
-                          onUserAdded(newUser);
+                          final UserDetails newUser = UserDetails(
+                            name: _name.text,
+                            email: _email.text,
+                            phoneNumber: _phoneNumber.text,
+                            address: _address.text,
+                            avatar: const AssetImage(
+                              'assets/images/avatar5.png',
+                            ),
+                          );
+                          userDataProvider.addUser(newUser);
                           Navigator.pop(context);
                         }
                       },

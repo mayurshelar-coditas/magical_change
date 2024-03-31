@@ -1,47 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:magical_change/models/user_details.dart';
+import 'package:magical_change/providers/user_data_provider.dart';
 import 'package:magical_change/widgets/user_input_form.dart';
+import 'package:provider/provider.dart';
 
-class UpdateProfile extends StatefulWidget {
-  const UpdateProfile({required this.userDetails, super.key});
-
-  final UserDetails userDetails;
-
-  @override
-  State<StatefulWidget> createState() {
-    return UpdateProfileState();
-  }
-}
-
-class UpdateProfileState extends State<UpdateProfile> {
-  late TextEditingController _name;
-  late TextEditingController _email;
-  late TextEditingController _phoneNumber;
-  late TextEditingController _address;
-  final _formKey = GlobalKey<FormState>();
-
-  @override
-  void initState() {
-    super.initState();
-    _name = TextEditingController(text: widget.userDetails.name);
-    _email = TextEditingController(text: widget.userDetails.email);
-    _phoneNumber = TextEditingController(text: widget.userDetails.phoneNumber);
-    _address = TextEditingController(text: widget.userDetails.address);
-  }
-
-  @override
-  void dispose() {
-    _name.dispose();
-    _email.dispose();
-    _phoneNumber.dispose();
-    _address.dispose();
-    super.dispose();
-  }
+class UpdateProfile extends StatelessWidget {
+  const UpdateProfile({required this.index, super.key});
+  final int index;
 
   @override
   Widget build(BuildContext context) {
+    final userDataProvider =
+        Provider.of<UserDataProvider>(context, listen: false);
+
+    TextEditingController name =
+        TextEditingController(text: userDataProvider.users[index].name);
+    TextEditingController email =
+        TextEditingController(text: userDataProvider.users[index].email);
+    TextEditingController phoneNumber =
+        TextEditingController(text: userDataProvider.users[index].phoneNumber);
+    TextEditingController address =
+        TextEditingController(text: userDataProvider.users[index].address);
+
+    final formKey = GlobalKey<FormState>();
+
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 238, 233, 233),
       appBar: AppBar(
@@ -51,15 +34,15 @@ class UpdateProfileState extends State<UpdateProfile> {
       body: Padding(
         padding: EdgeInsets.only(left: 20.w, right: 20.w),
         child: Form(
-          key: _formKey,
+          key: formKey,
           child: Column(
             children: [
-              UserDetailsFrom(
-                name: _name,
-                address: _address,
-                email: _email,
-                phoneNumber: _phoneNumber,
-                userAvatar: widget.userDetails.avatar,
+              UserDetailsForm(
+                name: name,
+                address: address,
+                email: email,
+                phoneNumber: phoneNumber,
+                userAvatar: userDataProvider.users[index].avatar,
                 title: "Update Profile",
               ),
               Padding(
@@ -81,11 +64,10 @@ class UpdateProfileState extends State<UpdateProfile> {
                     const Spacer(),
                     ElevatedButton(
                       onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          widget.userDetails.name = _name.text;
-                          widget.userDetails.email = _email.text;
-                          widget.userDetails.phoneNumber = _phoneNumber.text;
-                          Navigator.pop(context, widget.userDetails);
+                        if (formKey.currentState!.validate()) {
+                          userDataProvider.updateUser(index, name.text,
+                              phoneNumber.text, address.text, email.text);
+                          Navigator.pop(context);
                         }
                       },
                       style: ElevatedButton.styleFrom(
