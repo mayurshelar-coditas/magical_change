@@ -1,27 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:magical_change/providers/user_data_provider.dart';
 import 'package:magical_change/widgets/user_input_form.dart';
-import 'package:provider/provider.dart';
 
-class UpdateProfile extends StatelessWidget {
+class UpdateProfile extends ConsumerWidget {
   const UpdateProfile({required this.index, super.key});
   final int index;
 
   @override
-  Widget build(BuildContext context) {
-    final userDataProvider =
-        Provider.of<UserDataProvider>(context, listen: false);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.read(userProvider.notifier).getUser(index);
 
-    TextEditingController name =
-        TextEditingController(text: userDataProvider.users[index].name);
-    TextEditingController email =
-        TextEditingController(text: userDataProvider.users[index].email);
+    TextEditingController name = TextEditingController(text: user.name);
+    TextEditingController email = TextEditingController(text: user.email);
     TextEditingController phoneNumber =
-        TextEditingController(text: userDataProvider.users[index].phoneNumber);
-    TextEditingController address =
-        TextEditingController(text: userDataProvider.users[index].address);
+        TextEditingController(text: user.phoneNumber);
+    TextEditingController address = TextEditingController(text: user.address);
 
     final formKey = GlobalKey<FormState>();
 
@@ -42,7 +38,7 @@ class UpdateProfile extends StatelessWidget {
                 address: address,
                 email: email,
                 phoneNumber: phoneNumber,
-                userAvatar: userDataProvider.users[index].avatar,
+                userAvatar: user.avatar,
                 title: "Update Profile",
               ),
               Padding(
@@ -65,8 +61,12 @@ class UpdateProfile extends StatelessWidget {
                     ElevatedButton(
                       onPressed: () {
                         if (formKey.currentState!.validate()) {
-                          userDataProvider.updateUser(index, name.text,
-                              phoneNumber.text, address.text, email.text);
+                          ref.read(userProvider.notifier).updateUser(
+                              index,
+                              name.text,
+                              phoneNumber.text,
+                              address.text,
+                              email.text);
                           Navigator.pop(context);
                         }
                       },

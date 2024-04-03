@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:magical_change/models/user_details.dart';
 import 'package:magical_change/providers/user_data_provider.dart';
 import 'package:magical_change/widgets/user_input_form.dart';
-import 'package:provider/provider.dart';
 
 class AddNewUser extends StatelessWidget {
   AddNewUser({super.key});
@@ -17,7 +17,6 @@ class AddNewUser extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userDataProvider = Provider.of<UserDataProvider>(context, listen: false);
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 238, 233, 233),
       appBar: AppBar(
@@ -58,30 +57,32 @@ class AddNewUser extends StatelessWidget {
                       ),
                     ),
                     const Spacer(),
-                    ElevatedButton(
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          final UserDetails newUser = UserDetails(
-                            name: _name.text,
-                            email: _email.text,
-                            phoneNumber: _phoneNumber.text,
-                            address: _address.text,
-                            avatar: const AssetImage(
-                              'assets/images/avatar5.png',
-                            ),
-                          );
-                          userDataProvider.addUser(newUser);
-                          Navigator.pop(context);
-                        }
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.black,
-                        foregroundColor: Colors.white,
-                      ),
-                      child: Text(
-                        'Save',
-                        style: GoogleFonts.sansita(
-                          fontSize: 18.sp,
+                    Consumer(
+                      builder: (context, ref, child) => ElevatedButton(
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            final UserDetails newUser = UserDetails(
+                              name: _name.text,
+                              email: _email.text,
+                              phoneNumber: _phoneNumber.text,
+                              address: _address.text,
+                              avatar: const AssetImage(
+                                'assets/images/avatar5.png',
+                              ),
+                            );
+                            ref.read(userProvider.notifier).addUser(newUser);
+                            Navigator.pop(context);
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.black,
+                          foregroundColor: Colors.white,
+                        ),
+                        child: Text(
+                          'Save',
+                          style: GoogleFonts.sansita(
+                            fontSize: 18.sp,
+                          ),
                         ),
                       ),
                     ),

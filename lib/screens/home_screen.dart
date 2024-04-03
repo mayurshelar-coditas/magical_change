@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import 'package:magical_change/screens/add_new_user.dart';
 import 'package:magical_change/widgets/user_list.dart';
 

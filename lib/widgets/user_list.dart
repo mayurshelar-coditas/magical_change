@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:magical_change/providers/user_data_provider.dart';
 import 'package:magical_change/screens/update_profile.dart';
 import 'package:magical_change/widgets/users_list_item_widget.dart';
-import 'package:provider/provider.dart';
 
-class UserList extends StatelessWidget {
+class UserList extends ConsumerWidget {
   const UserList({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final userDataProvider = Provider.of<UserDataProvider>(context);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final users = ref.watch(userProvider).users;
     return ListView.builder(
-      itemCount: userDataProvider.users.length,
+      itemCount: users.length,
       itemBuilder: (BuildContext context, int index) {
         return GestureDetector(
           onTap: () {
@@ -40,7 +40,7 @@ class UserList extends StatelessWidget {
                     TextButton(
                       onPressed: () {
                         Navigator.of(context).pop();
-                        userDataProvider.deleteUser(index);
+                        ref.read(userProvider.notifier).deleteUser(index);
                       },
                       child: const Text("Delete"),
                     ),
@@ -49,10 +49,8 @@ class UserList extends StatelessWidget {
               },
             );
           },
-          child: Consumer<UserDataProvider>(
-            builder: (context, value, child) => UserListItemWidget(
-              userDetails: value.users[index],
-            ),
+          child: UserListItemWidget(
+            userDetails: users[index],
           ),
         );
       },

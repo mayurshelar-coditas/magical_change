@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:magical_change/models/user_details.dart';
 
-class UserDataProvider extends ChangeNotifier {
+class UserData {
   //List of users.
   final List<UserDetails> _users = [
     UserDetails(
@@ -53,25 +54,33 @@ class UserDataProvider extends ChangeNotifier {
 
   //Getter to get list of users
   List<UserDetails> get users => _users;
+}
+
+final userProvider = StateNotifierProvider<UserNotitifier, UserData>(
+  (ref) => UserNotitifier(),
+);
+
+class UserNotitifier extends StateNotifier<UserData> {
+  UserNotitifier() : super(UserData());
 
   void addUser(UserDetails userDetails) {
-    _users.insert(0, userDetails);
-    notifyListeners();
+    state.users.insert(0, userDetails);
+    state = state; //to notify listeners
   }
 
   void deleteUser(int index) {
-    if (index >= 0 && index < _users.length) {
-      _users.removeAt(index);
-      notifyListeners();
-    }
+    state.users.removeAt(index);
+    state = state; //to notify listeners
   }
 
   void updateUser(int index, String name, String phoneNumber, String address,
       String email) {
-    users[index].name = name;
-    users[index].email = email;
-    users[index].phoneNumber = phoneNumber;
-    users[index].address = address;
-    notifyListeners();
+    state.users[index].name = name;
+    state.users[index].email = email;
+    state.users[index].phoneNumber = phoneNumber;
+    state.users[index].address = address;
+    state = state; //to notify listeners 
   }
+
+  UserDetails getUser(int index) => state.users[index];
 }
