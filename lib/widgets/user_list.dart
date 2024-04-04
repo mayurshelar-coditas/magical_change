@@ -9,9 +9,8 @@ class UserList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final users = ref.watch(userProvider).users;
     return ListView.builder(
-      itemCount: users.length,
+      itemCount: ref.watch(userProvider.notifier).users.length,
       itemBuilder: (BuildContext context, int index) {
         return GestureDetector(
           onTap: () {
@@ -39,8 +38,8 @@ class UserList extends ConsumerWidget {
                     ),
                     TextButton(
                       onPressed: () {
-                        Navigator.of(context).pop();
                         ref.read(userProvider.notifier).deleteUser(index);
+                        Navigator.of(context).pop();
                       },
                       child: const Text("Delete"),
                     ),
@@ -50,7 +49,7 @@ class UserList extends ConsumerWidget {
             );
           },
           child: UserListItemWidget(
-            userDetails: users[index],
+            userDetails: ref.watch(userProvider).users[index],
           ),
         );
       },
