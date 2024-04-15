@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:magical_change/models/user_details.dart';
+import 'package:magical_change/data/models/user_data_model.dart';
 
 class UserListItemWidget extends StatelessWidget {
   const UserListItemWidget({required this.userDetails, super.key});
 
-  final UserDetails userDetails;
+  final UserDataModel userDetails;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +25,7 @@ class UserListItemWidget extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     radius: 70.r,
-                    backgroundImage: userDetails.avatar,
+                    backgroundImage: AssetImage(userDetails.avatar),
                   ),
                   SizedBox(height: 10.h),
                   Text(
